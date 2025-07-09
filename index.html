@@ -42,7 +42,7 @@
       return urlParams.get(param);
     }
 
-    async function processImage() {
+    async function processImage(priceText) {
       const url = document.getElementById("imgUrl").value;
       if (!url) return alert("กรุณาใส่ URL รูปภาพ");
 
@@ -90,7 +90,7 @@ ctx.font = 'bold 90px sans-serif'; // ปรับขนาดตามควา
 ctx.textAlign = 'center';            // ชิดกลางแนวนอน
 ctx.textBaseline = 'middle';         // ชิดกลางแนวตั้ง
 
-ctx.fillText('593.-', boxX + boxWidth / 2, boxY + boxHeight / 2);
+ctx.fillText(priceText, boxX + boxWidth / 2, boxY + boxHeight / 2);
 
 
 
@@ -117,9 +117,10 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
     // โหลดอัตโนมัติถ้ามีพารามิเตอร์ ?url=
     window.onload = function () {
       const paramUrl = getQueryParam("url");
+      const paramPrice = getQueryParam("price")
       if (paramUrl) {
         document.getElementById("imgUrl").value = paramUrl;
-        processImage();
+        processImage(paramPrice);
       }
     };
   </script>
