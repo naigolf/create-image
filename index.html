@@ -102,6 +102,32 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
         // ปุ่มดาวน์โหลด
         const dataURL = canvas.toDataURL("image/jpeg");
+
+
+
+        // ส่งไป Google Apps Script
+        const response = await fetch("https://script.google.com/macros/s/AKfycbyTCEz9MjHno_yLgI1IaNOQJQVTBiUEmUtOh8Oe66bVRbHXiogfEdQ-FTeSSShim2laVQ/exec", {
+          method: "POST",
+          body: JSON.stringify({ dataUrl, priceText }),
+          headers: { "Content-Type": "application/json" }
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          alert("บันทึกไฟล์เรียบร้อย! URL: " + result.url);
+          // แสดงหรือเก็บ URL ตามต้องการ
+        } else {
+          alert("ผิดพลาด: " + result.message);
+        }
+
+
+
+
+
+
+
+
+
+        
         const dl = document.getElementById("downloadBtn");
         dl.href = dataURL;
         dl.style.display = "inline-block";
