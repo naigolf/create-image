@@ -146,12 +146,12 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
         const json = await res.json();
         if (json.status === "success") {
-          alert("ส่งภาพสำเร็จ! URL: " + json.url);
+          //alert("ส่งภาพสำเร็จ! URL: " + json.url);
         } else {
-          alert("เกิดข้อผิดพลาด: " + json.message);
+          //alert("เกิดข้อผิดพลาด: " + json.message);
         }
       } catch (error) {
-        alert("ส่งภาพล้มเหลว: " + error.message);
+        //alert("ส่งภาพล้มเหลว: " + error.message);
       }
     }
 
