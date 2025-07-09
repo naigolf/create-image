@@ -165,18 +165,22 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
 
 
-
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
     
 
     // โหลดอัตโนมัติถ้ามีพารามิเตอร์ ?url=
-    window.onload = function () {
+    window.onload = async function () {
       const paramUrl = getQueryParam("url");
       const paramPrice = getQueryParam("price")
       if (paramUrl) {
         document.getElementById("imgUrl").value = paramUrl;
-        processImage(paramPrice);
+        await processImage(paramPrice);
+        await delay(3000); // ⏳ รอ 3 วินาที
+        await sendToAppsScript();
       }
     };
   </script>
