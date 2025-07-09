@@ -40,7 +40,7 @@
   <script>
 
     let lastDataUrl = null;
-    let lastPriceText = "59.-";
+    let lastPriceText = null;
     
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -103,6 +103,7 @@ ctx.lineWidth = 2;
 ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
         // ปุ่มดาวน์โหลด
+        lastPriceText = priceText;
         lastDataUrl  = canvas.toDataURL("image/jpeg");
         const dl = document.getElementById("downloadBtn");
         dl.href = lastDataUrl;
@@ -137,7 +138,7 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
           method: "POST",
           body: JSON.stringify({
             dataUrl: lastDataUrl,
-            priceText: priceText
+            priceText: lastPriceText
           }),
           headers: {
             "Content-Type": "text/plain"
