@@ -51,26 +51,40 @@
       const img = new Image();
       img.crossOrigin = "Anonymous"; // สำคัญ: ต้องใช้กับรูปที่รองรับ CORS เท่านั้น
 
+
+      const desiredWidth = 800;
+        
       img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+
+  // คำนวณสัดส่วน
+  const scaleFactor = desiredWidth / img.width;
+  const newWidth = desiredWidth;
+  const newHeight = img.height * scaleFactor;
+
+  // ตั้ง canvas ขนาดใหม่
+  canvas.width = newWidth;
+  canvas.height = newHeight;
+
+  // วาดภาพขนาดใหม่
+  ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
         // กรอบสีแดง
         ctx.lineWidth = 10;
         ctx.strokeStyle = "red";
-        ctx.strokeRect(0, 0, img.width, img.height);
+        ctx.strokeRect(0, 0, newWidth, newHeight);
 
- // กล่องสีดำ
-const boxX = img.width - 250;
-const boxY = img.height - 350;
+  // กล่องดำและข้อความ ตัวอย่าง
+const boxX = newWidth - 250;
+const boxY = newWidth - 350;
 const boxWidth = 250;
 const boxHeight = 120;
 
 ctx.fillStyle = 'black';
 ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
 
-// ข้อความ 59.- ตรงกลางกล่อง
+
+
+        // ข้อความ 59.- ตรงกลางกล่อง
 ctx.fillStyle = 'yellow';
 ctx.font = 'bold 90px sans-serif'; // ปรับขนาดตามความสูงของกล่อง
 ctx.textAlign = 'center';            // ชิดกลางแนวนอน
