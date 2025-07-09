@@ -61,22 +61,30 @@
         ctx.strokeStyle = "red";
         ctx.strokeRect(0, 0, img.width, img.height);
 
-        // กล่องดำมุมล่างขวา
-        const boxWidth = 100;
-        const boxHeight = 50;
-        const padding = 20;
-        ctx.fillStyle = "black";
-        ctx.fillRect(
-          img.width - boxWidth - padding,
-          img.height - boxHeight - padding,
-          boxWidth,
-          boxHeight
-        );
+ // กล่องสีดำ
+const boxX = img.width - 250;
+const boxY = img.height - 350;
+const boxWidth = 250;
+const boxHeight = 120;
 
-        // ข้อความ "59.-"
-        ctx.fillStyle = "yellow";
-        ctx.font = "bold 24px sans-serif";
-        ctx.fillText("59.-", img.width - boxWidth + 10 - padding, img.height - 20);
+ctx.fillStyle = 'black';
+ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+// ข้อความ 59.- ตรงกลางกล่อง
+ctx.fillStyle = 'yellow';
+ctx.font = 'bold 90px sans-serif'; // ปรับขนาดตามความสูงของกล่อง
+ctx.textAlign = 'center';            // ชิดกลางแนวนอน
+ctx.textBaseline = 'middle';         // ชิดกลางแนวตั้ง
+
+ctx.fillText('593.-', boxX + boxWidth / 2, boxY + boxHeight / 2);
+
+
+
+
+
+ctx.strokeStyle = 'lime';
+ctx.lineWidth = 2;
+ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
         // ปุ่มดาวน์โหลด
         const dataURL = canvas.toDataURL("image/jpeg");
