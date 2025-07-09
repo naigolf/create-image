@@ -1,66 +1,105 @@
-const express = require('express');
-const axios = require('axios');
-const fs = require('fs');
-const { createCanvas, loadImage } = require('canvas');
-const { v4: uuidv4 } = require('uuid');
-const app = express();
-const PORT = process.env.PORT || 3000;
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Decorator 59.-</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+    input {
+      width: 60%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h2>🖼️ ตกแต่งภาพพร้อมป้ายราคา <strong>59.-</strong></h2>
+  <input type="text" id="imgUrl" placeholder="ใส่ URL รูปภาพ (ต้องรองรับ CORS)">
+  <button onclick="processImage()">🎨 ประมวลผล</button>
+  <br/>
+  <canvas id="canvas"></canvas>
+  <br/>
+  <a id="downloadBtn" href="#" download="edited.jpg" style="display:none;">📥 ดาวน์โหลดภาพใหม่</a>
 
-app.use('/edited', express.static('edited'));
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
 
-app.get('/edit', async (req, res) => {
-  const imageUrl = req.query.url;
-  if (!imageUrl) return res.status(400).send("Missing ?url");
+    async function processImage() {
+      const url = document.getElementById("imgUrl").value;
+      if (!url) return alert("กรุณาใส่ URL รูปภาพ");
 
-  try {
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-    const imageBuffer = Buffer.from(response.data, 'binary');
-    const image = await loadImage(imageBuffer);
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.crossOrigin = "Anonymous"; // สำคัญ: ต้องใช้กับรูปที่รองรับ CORS เท่านั้น
 
-    const width = image.width;
-    const height = image.height;
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext('2d');
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-    // Draw image
-    ctx.drawImage(image, 0, 0, width, height);
+        // กรอบสีแดง
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(0, 0, img.width, img.height);
 
-    // Red border
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect(0, 0, width, height);
+        // กล่องดำมุมล่างขวา
+        const boxWidth = 100;
+        const boxHeight = 50;
+        const padding = 20;
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+          img.width - boxWidth - padding,
+          img.height - boxHeight - padding,
+          boxWidth,
+          boxHeight
+        );
 
-    // Black box with yellow text "59.-"
-    const boxWidth = 100;
-    const boxHeight = 50;
-    ctx.fillStyle = 'black';
-    ctx.fillRect(width - boxWidth - 20, height - boxHeight - 20, boxWidth, boxHeight);
+        // ข้อความ "59.-"
+        ctx.fillStyle = "yellow";
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillText("59.-", img.width - boxWidth + 10 - padding, img.height - 20);
 
-    ctx.fillStyle = 'yellow';
-    ctx.font = 'bold 24px sans-serif';
-    ctx.fillText('59.-', width - boxWidth + 10 - 20, height - 20);
+        // ปุ่มดาวน์โหลด
+        const dataURL = canvas.toDataURL("image/jpeg");
+        const dl = document.getElementById("downloadBtn");
+        dl.href = dataURL;
+        dl.style.display = "inline-block";
+      };
 
-    // Save and return URL
-    const filename = uuidv4() + '.jpg';
-    const filepath = `edited/${filename}`;
-    fs.mkdirSync('edited', { recursive: true });
+      img.onerror = function () {
+        alert("โหลดภาพไม่ได้ (อาจเกิดจาก CORS หรือ URL ผิด)");
+      };
 
-    const out = fs.createWriteStream(filepath);
-    const stream = canvas.createJPEGStream();
-    stream.pipe(out);
-    out.on('finish', () => {
-      res.json({
-        status: 'success',
-        url: `${req.protocol}://${req.get('host')}/edited/${filename}`
-      });
-    });
+      img.src = url;
+    }
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to process image");
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+    // โหลดอัตโนมัติถ้ามีพารามิเตอร์ ?url=
+    window.onload = function () {
+      const paramUrl = getQueryParam("url");
+      if (paramUrl) {
+        document.getElementById("imgUrl").value = paramUrl;
+        processImage();
+      }
+    };
+  </script>
+</body>
+</html>
