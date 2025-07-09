@@ -130,7 +130,7 @@ ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
     async function sendToAppsScript() {
       if (!lastDataUrl) return alert("ยังไม่มีภาพที่ประมวลผล กรุณากด 🎨 ประมวลผลก่อน");
 
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbz3NQpnfSdfDztBauOoyoey6Q-Zvck7qF0Bl4Om8Wi03wPWVtlSM5W1lFxauzSQ-o881Q/exec"; // แก้เป็น URL Apps Script ของคุณ
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbzk_cCIDf0Lmk22MfzGYJhZmffJh0nKzAubDAcf8fAHB86wO7MzejJ7D2q48T9PqlvYpg/exec"; // แก้เป็น URL Apps Script ของคุณ
 
       try {
         const res = await fetch(webAppUrl, {
